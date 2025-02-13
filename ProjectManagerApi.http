@@ -1,0 +1,6 @@
+@ProjectManagerApi_HostAddress = http://localhost:5116
+
+GET {{ProjectManagerApi_HostAddress}}/api/project
+Accept: application/json
+
+###
