@@ -13,10 +13,24 @@ namespace ProjectManagerApi.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
+        public async Task<IEnumerable<object>> GetAllEmployeesAsync()
         {
-            return await _context.Employees.ToListAsync();
+            var employees = await _context.Employees
+                .Include(e => e.Company)
+                .Select(e => new
+                {
+                    e.Id,
+                    e.FirstName,
+                    e.LastName,
+                    e.MiddleName,
+                    e.Email,
+                    CompanyName = e.Company.Name
+                })
+                .ToListAsync();
+
+            return employees;
         }
+
 
         public async Task<Employee> GetEmployeeByIdAsync(int id)
         {

@@ -13,7 +13,7 @@ namespace ProjectManagerApi.Services
         }
 
         // Получение всех сотрудников
-        public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
+        public async Task<IEnumerable<object>> GetAllEmployeesAsync()
         {
             return await _employeeRepository.GetAllEmployeesAsync();
         }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ProjectManagerApi.Database;
 using ProjectManagerApi.Models;
 using ProjectManagerApi.Services;
 
@@ -19,7 +21,7 @@ namespace ProjectManagerApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
         {
-            return Ok(await _projectService.GetAllProjectsAsync());
+                return Ok(await _projectService.GetAllProjectsAsync());
         }
 
         [HttpGet("{id}")]
@@ -84,9 +86,10 @@ namespace ProjectManagerApi.Controllers
         {
             var employees = await _projectService.GetEmployeesForProjectAsync(projectId);
             if (employees == null || !employees.Any())
-                return NotFound();
+                return NotFound("No employees found for this project.");
 
             return Ok(employees);
         }
+
     }
 }

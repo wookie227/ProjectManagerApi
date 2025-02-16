@@ -18,6 +18,7 @@ namespace ProjectManagerApi.Repositories
             return await _context.Projects
                 .Include(p => p.CustomerCompany)
                 .Include(p => p.ExecutorCompany)
+                .Include(p => p.ProjectManager)
                 .Select(p => new
                 {
                     p.Id,
@@ -27,10 +28,11 @@ namespace ProjectManagerApi.Repositories
                     p.StartDate,
                     p.EndDate,
                     p.Priority,
-                    p.ProjectManagerId
+                    ProjectManagerName = p.ProjectManager.FirstName + " " + p.ProjectManager.LastName
                 })
                 .ToListAsync();
         }
+
 
 
         public async Task<Project> GetProjectByIdAsync(int id)

@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjectManagerApi.Models
@@ -28,9 +27,11 @@ namespace ProjectManagerApi.Models
 
         [Required]
         public int CompanyId { get; set; }
-        [JsonIgnore]
+
+        [JsonIgnore] // Исключаем Company при сериализации
         public Company? Company { get; set; }
 
+        [JsonIgnore] // Исключаем список проектов сотрудника
         public List<ProjectEmployee>? ProjectEmployees { get; set; }
     }
 }
