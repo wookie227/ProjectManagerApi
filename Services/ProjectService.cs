@@ -51,5 +51,10 @@ namespace ProjectManagerApi.Services
         {
             return await _projectRepository.GetEmployeesForProjectAsync(projectId);
         }
+
+        public async Task<Project?> UpdateProjectFilePathAsync(int projectId, string filePath)
+        {
+            return await _projectRepository.UpdateProjectFilePathAsync(projectId, filePath);
+        }
     }
 }

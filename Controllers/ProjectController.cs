@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectManagerApi.Database;
 using ProjectManagerApi.Models;
 using ProjectManagerApi.Services;
+using System.Globalization;
 
 namespace ProjectManagerApi.Controllers
 {
@@ -91,5 +92,48 @@ namespace ProjectManagerApi.Controllers
             return Ok(employees);
         }
 
+        [HttpPost("{projectId}/upload")]
+        public async Task<IActionResult> UploadFile(int projectId, [FromBody] FileUploadRequest request)
+        {
+            if (string.IsNullOrEmpty(request.File))
+            {
+                return BadRequest("Файл не загружен.");
+            }
+
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            var fileBytes = Convert.FromBase64String(request.File);
+            var filePath = Path.Combine(uploadsFolder, $"{Guid.NewGuid()}+{request.name}");
+
+            await System.IO.File.WriteAllBytesAsync(filePath, fileBytes);
+
+            var updatedProject = await _projectService.UpdateProjectFilePathAsync(projectId, filePath);
+            if (updatedProject == null)
+            {
+                return NotFound("Проект не найден.");
+            }
+
+            return Ok(new { filePath });
+        }
+
+        [HttpGet("{projectId}/download")]
+        public IActionResult DownloadFile(int projectId)
+        {
+            var project = _projectService.GetProjectByIdAsync(projectId).Result;
+            if (project == null || string.IsNullOrEmpty(project.FilePath))
+            {
+                return NotFound("Файл не найден.");
+            }
+
+            var filePath = project.FilePath;
+            var fileName = Path.GetFileName(filePath);
+            Console.WriteLine(fileName);
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+            return File(fileBytes, "application/octet-stream", fileName);
+        }
     }
 }

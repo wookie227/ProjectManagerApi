@@ -12,5 +12,6 @@ namespace ProjectManagerApi.Repositories
         Task<bool> AddEmployeeToProjectAsync(int projectId, int employeeId);
         Task<bool> DeleteEmployeeFromProjectAsync(int projectId, int employeeId);
         Task<IEnumerable<Employee>> GetEmployeesForProjectAsync(int projectId);
+        Task<Project?> UpdateProjectFilePathAsync(int projectId, string filePath);
     }
 }

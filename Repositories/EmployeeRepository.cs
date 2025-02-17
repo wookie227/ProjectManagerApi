@@ -56,9 +56,22 @@ namespace ProjectManagerApi.Repositories
             var employee = await _context.Employees.FindAsync(id);
             if (employee == null) return false;
 
+            var projectsWithManager = _context.Projects.Where(p => p.ProjectManagerId == id).ToList();
+
+            if (projectsWithManager.Any())
+            {
+                foreach (var project in projectsWithManager)
+                {
+                    project.ProjectManagerId = null;
+                }
+                await _context.SaveChangesAsync();
+            }
+
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
+
             return true;
         }
+
     }
 }

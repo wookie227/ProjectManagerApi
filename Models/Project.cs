@@ -23,15 +23,17 @@ namespace ProjectManagerApi.Models
         [Required]
         public DateTime StartDate { get; set; }
 
-        [Required]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [Required]
         public int Priority { get; set; }
 
-        public int ProjectManagerId { get; set; }
+        public int? ProjectManagerId { get; set; }
         public Employee? ProjectManager { get; set; }
 
         public List<ProjectEmployee>? ProjectEmployees { get; set; }
+
+
+        public string? FilePath { get; set; } = string.Empty;
     }
 }

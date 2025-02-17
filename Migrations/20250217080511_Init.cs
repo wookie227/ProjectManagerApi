@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProjectManagerApi.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -57,9 +57,10 @@ namespace ProjectManagerApi.Migrations
                     CustomerCompanyId = table.Column<int>(type: "int", nullable: false),
                     ExecutorCompanyId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    ProjectManagerId = table.Column<int>(type: "int", nullable: false)
+                    ProjectManagerId = table.Column<int>(type: "int", nullable: true),
+                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -136,6 +137,59 @@ namespace ProjectManagerApi.Migrations
                 name: "IX_Projects_ProjectManagerId",
                 table: "Projects",
                 column: "ProjectManagerId");
+
+            migrationBuilder.InsertData(
+        table: "Companies",
+        columns: new[] { "Id", "Name" },
+        values: new object[,]
+        {
+            { 1, "TechCorp" },
+            { 2, "Innovate Ltd" },
+            { 3, "SoftSolutions" },
+            { 4, "DevHouse" },
+            { 5, "AI Works" }
+        });
+
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "Id", "FirstName", "LastName", "MiddleName", "Email", "CompanyId" },
+                values: new object[,]
+                {
+            { 1, "John", "Doe", "A", "john.doe@techcorp.com", 1 },
+            { 2, "Jane", "Smith", "B", "jane.smith@innovate.com", 2 },
+            { 3, "Alice", "Johnson", "C", "alice.j@softsolutions.com", 3 },
+            { 4, "Bob", "Brown", "D", "bob.b@devhouse.com", 4 },
+            { 5, "Charlie", "Davis", "E", "charlie.d@aiworks.com", 5 },
+            { 6, "Dave", "Wilson", "F", "dave.w@techcorp.com", 1 },
+            { 7, "Eva", "Anderson", "G", "eva.a@innovate.com", 2 },
+            { 8, "Frank", "Thomas", "H", "frank.t@softsolutions.com", 3 },
+            { 9, "Grace", "Lee", "I", "grace.l@devhouse.com", 4 },
+            { 10, "Henry", "White", "J", "henry.w@aiworks.com", 5 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Projects",
+                columns: new[] { "Id", "ProjectName", "CustomerCompanyId", "ExecutorCompanyId", "StartDate", "Priority", "ProjectManagerId" },
+                values: new object[,]
+                {
+            { 1, "Project Alpha", 1, 2, DateTime.UtcNow, 1, 1 },
+            { 2, "Project Beta", 2, 3, DateTime.UtcNow, 2, 2 },
+            { 3, "Project Gamma", 3, 4, DateTime.UtcNow, 3, 3 },
+            { 4, "Project Delta", 4, 5, DateTime.UtcNow, 1, 4 },
+            { 5, "Project Epsilon", 5, 1, DateTime.UtcNow, 2, 5 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProjectEmployees",
+                columns: new[] { "Id", "ProjectId", "EmployeeId" },
+                values: new object[,]
+                {
+            { 1, 1, 2 }, { 2, 1, 3 }, { 3, 1, 4 },
+            { 4, 2, 5 }, { 5, 2, 6 }, { 6, 2, 7 },
+            { 7, 3, 8 }, { 8, 3, 9 }, { 9, 3, 10 },
+            { 10, 4, 1 }, { 11, 4, 3 }, { 12, 4, 5 },
+            { 13, 5, 7 }, { 14, 5, 9 }, { 15, 5, 2 }
+                });
         }
 
         /// <inheritdoc />

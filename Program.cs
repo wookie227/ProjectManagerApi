@@ -12,9 +12,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         policy =>
         {
-            policy.AllowAnyOrigin() // Разрешаем запросы со всех источников
-                  .AllowAnyMethod() // Разрешаем любые HTTP-методы (GET, POST, PUT, DELETE)
-                  .AllowAnyHeader(); // Разрешаем любые заголовки
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
         });
 });
 
@@ -50,7 +50,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-/*app.UseHttpsRedirection();*/
+app.UseStaticFiles();
 
 app.UseAuthorization();
 

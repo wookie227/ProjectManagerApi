@@ -28,12 +28,11 @@ namespace ProjectManagerApi.Repositories
                     p.StartDate,
                     p.EndDate,
                     p.Priority,
-                    ProjectManagerName = p.ProjectManager.FirstName + " " + p.ProjectManager.LastName
+                    ProjectManagerName = p.ProjectManager.FirstName + " " + p.ProjectManager.LastName,
+                    p.FilePath
                 })
                 .ToListAsync();
         }
-
-
 
         public async Task<Project> GetProjectByIdAsync(int id)
         {
@@ -58,6 +57,11 @@ namespace ProjectManagerApi.Repositories
         {
             var project = await _context.Projects.FindAsync(id);
             if (project == null) return false;
+
+            if (!string.IsNullOrEmpty(project.FilePath) && File.Exists(project.FilePath))
+            {
+                File.Delete(project.FilePath);
+            }
 
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
@@ -104,6 +108,18 @@ namespace ProjectManagerApi.Repositories
                 .ToListAsync();
 
             return projectEmployees;
+        }
+
+        public async Task<Project?> UpdateProjectFilePathAsync(int projectId, string filePath)
+        {
+            var project = await _context.Projects.FindAsync(projectId);
+            if (project == null)
+                return null;
+
+            project.FilePath = filePath;
+            await _context.SaveChangesAsync();
+
+            return project;
         }
 
     }

@@ -12,8 +12,8 @@ using ProjectManagerApi.Database;
 namespace ProjectManagerApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250213133559_init")]
-    partial class init
+    [Migration("20250217080511_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,16 +92,19 @@ namespace ProjectManagerApi.Migrations
                     b.Property<int>("CustomerCompanyId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("ExecutorCompanyId")
                         .HasColumnType("int");
 
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProjectManagerId")
+                    b.Property<int?>("ProjectManagerId")
                         .HasColumnType("int");
 
                     b.Property<string>("ProjectName")
@@ -174,8 +177,7 @@ namespace ProjectManagerApi.Migrations
                     b.HasOne("ProjectManagerApi.Models.Employee", "ProjectManager")
                         .WithMany()
                         .HasForeignKey("ProjectManagerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("CustomerCompany");
 
